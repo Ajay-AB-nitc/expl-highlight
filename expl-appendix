@@ -1,0 +1,25 @@
+Appendix
+Keywords
+
+The following are the reserved keywords in ExpL and it cannot be used as identifiers.
+read 	write 	if 	then 	else 	begin 	initialize
+endif 	do 	endwhile 	break 	while 	end
+int 	str 	return 	decl 	enddecl 	alloc
+type 	endtype 	NULL 	continue 	main 	free
+
+Operators and Delimiters
+
+The following are the operators and delimiters in ExpL
+> 	< 	>= 	<= 	!= 	== 	( 	)
+{ 	} 	[ 	] 	/ 	; 	* 	=
++ 	- 	% 	AND 	NOT 	OR 	.
+
+Identifiers
+
+Identifiers are names of variables and user-defined functions. Identifiers should start with an letter, and may contain both letters and digits. Special characters are not allowed in identifiers.
+
+letter -> [a-z]|[A-Z]
+
+digit -> [0-9]
+
+identifier -> (letter)(letter | digit)*

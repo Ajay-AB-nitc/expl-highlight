@@ -1,0 +1,48 @@
+// Test program for expl syntax highlighting
+type
+  node {
+    int x;
+  }
+endtype
+
+decl
+  int a, b;
+  str c;
+  node fun(node t);
+enddecl
+
+node fun(node t) {
+  begin
+    t.x = 3;
+    t = NULL;
+    return t;
+  end
+}
+
+int main() {
+  decl
+    int val;
+    node r, s;
+  enddecl
+  begin
+    /* Main program logic
+       Testing comments and loops */
+    val = initialize();
+    r = alloc();
+    r.x = 5;
+    s = fun(r);
+    
+    if (r.x == 5 OR r.x != 3 AND NOT (r.x < 0)) then
+      write("Hello World");
+    else
+      while (val <= 10) do
+        val = val + 1;
+        if (val == 8) then
+          continue;
+        endif;
+      endwhile;
+    endif;
+
+    return 0;
+  end
+}
