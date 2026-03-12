@@ -1,14 +1,19 @@
 {
   "name": "expl-highlight",
   "displayName": "Expl-Highlight",
-  "description": "",
-  "version": "0.0.1",
+  "description": "A simple code highlighter for Expl language",
+  "version": "0.0.2",
+  "license": "MIT",
   "engines": {
     "vscode": "^1.110.0"
   },
   "categories": [
     "Other"
   ],
+  "repository": {
+		"type": "git",
+		"url": "https://github.com/Ajay-AB-nitc/expl-highlight.git"
+	},
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
