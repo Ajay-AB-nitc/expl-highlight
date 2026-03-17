@@ -5,23 +5,28 @@
   "version": "0.0.2",
   "license": "MIT",
   "engines": {
-    "vscode": "^1.110.0"
+    "vscode": "^1.71.0"
   },
   "categories": [
     "Other"
   ],
   "repository": {
-		"type": "git",
-		"url": "https://github.com/Ajay-AB-nitc/expl-highlight.git"
-	},
+    "type": "git",
+    "url": "https://github.com/Ajay-AB-nitc/expl-highlight.git"
+  },
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
     "languages": [
       {
         "id": "expl",
-        "aliases": ["ExpL", "expl"],
-        "extensions": [".expl"],
+        "aliases": [
+          "ExpL",
+          "expl"
+        ],
+        "extensions": [
+          ".expl"
+        ],
         "configuration": "./language-configuration.json"
       }
     ],
@@ -48,13 +53,13 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.110.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
-    "typescript-eslint": "^8.54.0",
+    "@types/vscode": "^1.110.0",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2",
     "eslint": "^9.39.2",
     "typescript": "^5.9.3",
-    "@vscode/test-cli": "^0.0.12",
-    "@vscode/test-electron": "^2.5.2"
+    "typescript-eslint": "^8.54.0"
   }
 }

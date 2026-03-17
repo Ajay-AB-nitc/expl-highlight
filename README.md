@@ -31,16 +31,29 @@ A simple VS Code extension for providing syntax highlighting and code snippets f
        code --install-extension path/to/expl-highlight-x.x.x.vsix
        ```
 
-### Option 2: Manual Installation
+### Option 2: From Source
 
-If you prefer to install from source:
+If you prefer to build from source or make modifications:
 
-1. **Clone**: Clone this repository to your local machine.
-2. **Copy**: Copy the cloned folder to the VS Code extensions directory:
+1. **Clone & Navigate**: Clone this repository to your local machine and open the folder in VS Code.
+   ```bash
+   git clone <repository-url>
+   cd expl-highlight
+   ```
+2. **Install Dependencies**: Run the following command to install the required Node.js packages:
+   ```bash
+   npm install
+   ```
+3. **Compile**: Build the extension:
+   ```bash
+   npm run compile
+   ```
+4. **Test Modifications**: If you are making changes to the source code, you can press **F5** in VS Code to launch an Extension Development Host window and try out your modifications instantly.
+5. **Install Manually**: To install it permanently for regular use, copy the cloned folder to your VS Code extensions directory:
    - **Linux**: `~/.vscode/extensions/`
    - **Windows**: `C:\Users\USER_NAME\.vscode\extensions\`
    - **macOS**: `~/.vscode/extensions/`
-3. **Restart**: Restart VS Code to activate the extension.
+6. **Restart**: Restart VS Code to activate the extension.
 
 ## Usage
 

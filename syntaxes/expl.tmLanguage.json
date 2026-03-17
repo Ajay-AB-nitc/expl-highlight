@@ -132,7 +132,7 @@
     "keywords": {
       "patterns": [
         {
-          "match": "\\b(if|then|else|endif|while|do|endwhile|break|continue|begin|end|return)\\b",
+          "match": "\\b(if|then|else|endif|while|do|endwhile|break|continue|begin|end|return|breakpoint)\\b",
           "name": "keyword.control.expl"
         },
         {
@@ -172,7 +172,7 @@
     "identifiers": {
       "patterns": [
         {
-          "match": "\\b(?!(?:if|then|else|endif|while|do|endwhile|break|continue|begin|end|return|read|write|initialize|alloc|free|exposcall|decl|enddecl|type|endtype|main|AND|OR|NOT|int|str|NULL)\\b)([a-zA-Z_][a-zA-Z0-9_]*)\\b(?=\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\b|\\s*\\{)",
+          "match": "\\b(?!(?:if|then|else|endif|while|do|endwhile|break|continue|begin|end|return|breakpoint|read|write|initialize|alloc|free|exposcall|decl|enddecl|type|endtype|main|AND|OR|NOT|int|str|NULL)\\b)([a-zA-Z_][a-zA-Z0-9_]*)\\b(?=\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\b|\\s*\\{)",
           "name": "entity.name.type.expl"
         },
         {

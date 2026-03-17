@@ -43,7 +43,7 @@ export function activate(context: vscode.ExtensionContext) {
 				'break', 'continue', 'return',
 				'begin', 'end',
 				'decl', 'enddecl', 'type', 'endtype',
-				'main', 'AND', 'OR', 'NOT'
+				'main', 'AND', 'OR', 'NOT', 'breakpoint'
 			];
 			keywords.forEach(kw => {
 				const item = new vscode.CompletionItem(kw, vscode.CompletionItemKind.Keyword);
@@ -105,6 +105,21 @@ export function activate(context: vscode.ExtensionContext) {
 			mainSnippet.sortText = '0main'; // Prioritize over keyword 'main'
 			mainSnippet.preselect = true;
 			completionItems.push(mainSnippet);
+
+
+			const breakSnippet = new vscode.CompletionItem('break', vscode.CompletionItemKind.Snippet);
+			breakSnippet.insertText = new vscode.SnippetString('break;');
+			breakSnippet.detail = 'break statement';
+			// breakpointSnippet.sortText = '0breakpoint'; // Prioritize over keyword 'breakpoint'
+			breakSnippet.preselect = true;
+			completionItems.push(breakSnippet);
+
+			const breakpointSnippet = new vscode.CompletionItem('breakpoint', vscode.CompletionItemKind.Snippet);
+			breakpointSnippet.insertText = new vscode.SnippetString('breakpoint;');
+			breakpointSnippet.detail = 'breakpoint statement';
+			// breakpointSnippet.sortText = '0breakpoint'; // Prioritize over keyword 'breakpoint'
+			breakpointSnippet.preselect = true;
+			completionItems.push(breakpointSnippet);
 
 			return completionItems;
 		}
