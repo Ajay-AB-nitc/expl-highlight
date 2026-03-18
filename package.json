@@ -1,19 +1,31 @@
 {
   "name": "expl-highlight",
   "displayName": "Expl-Highlight",
+  "icon": "image/icon.png",
   "description": "A simple code highlighter for Expl language",
-  "version": "0.0.2",
+  "version": "1.0.0",
+  "author": {
+    "name": "Ajay AB",
+    "url": "https://github.com/Ajay-AB-nitc"
+  },
   "license": "MIT",
   "engines": {
-    "vscode": "^1.110.0"
+    "vscode": "^1.74.0"
   },
   "categories": [
-    "Other"
+    "Programming Languages"
   ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Ajay-AB-nitc/expl-highlight.git"
   },
+  "keywords": [
+    "expl",
+    "expos",
+    "myexpos",
+    "xsm",
+    "nitc"
+  ],
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
@@ -55,7 +67,7 @@
   "devDependencies": {
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
-    "@types/vscode": "^1.110.0",
+    "@types/vscode": "^1.74.0",
     "@vscode/test-cli": "^0.0.12",
     "@vscode/test-electron": "^2.5.2",
     "eslint": "^9.39.2",
