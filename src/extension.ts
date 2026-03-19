@@ -1,6 +1,8 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
+import * as fs from 'fs';
+import * as path from 'path';
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -9,6 +11,16 @@ export function activate(context: vscode.ExtensionContext) {
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "expl-highlight" is now active!');
+
+	// Load system calls from syscalls.json
+	let syscalls: any[] = [];
+	const syscallsPath = path.join(context.extensionPath, 'syscalls.json');
+	try {
+		const syscallsContent = fs.readFileSync(syscallsPath, 'utf8');
+		syscalls = JSON.parse(syscallsContent);
+	} catch (err) {
+		console.error('Failed to load syscalls.json', err);
+	}
 
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with registerCommand
@@ -22,6 +34,12 @@ export function activate(context: vscode.ExtensionContext) {
 	const completionProvider = vscode.languages.registerCompletionItemProvider('expl', {
 		provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
 			const completionItems: vscode.CompletionItem[] = [];
+			const linePrefix = document.lineAt(position).text.substr(0, position.character);
+			const isInsideExposcallFirstArg = linePrefix.match(/exposcall\s*\(\s*[^,]*$/);
+
+			if (isInsideExposcallFirstArg) {
+				return undefined;
+			}
 
 			// 1. Types
 			const types = ['int', 'str'];
@@ -60,6 +78,9 @@ export function activate(context: vscode.ExtensionContext) {
 					item.insertText = new vscode.SnippetString(`${fn}();`);
 				} else {
 					item.insertText = new vscode.SnippetString(`${fn}($1);`);
+					if (fn === 'exposcall') {
+						item.command = { command: 'editor.action.triggerSuggest', title: 'Trigger Suggest' };
+					}
 				}
 				completionItems.push(item);
 			});
@@ -125,7 +146,98 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	});
 
-	context.subscriptions.push(disposable, completionProvider);
+	const exposcallCompletionProvider = vscode.languages.registerCompletionItemProvider('expl', {
+		provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {
+			const linePrefix = document.lineAt(position).text.substr(0, position.character);
+			// Check if we are right after exposcall( or inside its first string argument
+			const matchNoQuote = linePrefix.match(/exposcall\s*\(\s*[a-zA-Z]*$/);
+			const matchOpenQuote = linePrefix.match(/exposcall\s*\(\s*"[^"]*$/);
+			
+			if (matchNoQuote || matchOpenQuote) {
+				return syscalls.map((sys: any) => {
+					// Display with quotes in suggestion list only if the user hasn't typed a quote yet
+					const label = matchNoQuote ? `"${sys.name}"` : sys.name;
+					const item = new vscode.CompletionItem(label, vscode.CompletionItemKind.Value);
+					item.detail = `System Call: ${sys.name}`;
+					let doc = `**${sys.name}**\n\nArguments:\n`;
+					if (sys.arg1) { doc += `- arg1: ${sys.arg1}\n`; }
+					if (sys.arg2) { doc += `- arg2: ${sys.arg2}\n`; }
+					if (sys.arg3) { doc += `- arg3: ${sys.arg3}\n`; }
+					item.documentation = new vscode.MarkdownString(doc);
+					
+					// Insert bare name if inside quotes, otherwise insert with quotes
+					if (matchOpenQuote) {
+						item.insertText = sys.name;
+					} else {
+						item.insertText = `"${sys.name}"`;
+					}
+					return item;
+				});
+			}
+			return undefined;
+		}
+	}, '(', '"');
+
+	const signatureHelpProvider = vscode.languages.registerSignatureHelpProvider('expl', {
+		provideSignatureHelp(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken, context: vscode.SignatureHelpContext) {
+			const linePrefix = document.lineAt(position).text.substr(0, position.character);
+			const match = linePrefix.match(/exposcall\s*\((.*)$/);
+			if (!match) { return undefined; }
+
+			const argsString = match[1];
+			let commas = 0;
+			let quoted = false;
+			for (let i = 0; i < argsString.length; i++) {
+				if (argsString[i] === '"') { quoted = !quoted; }
+				if (argsString[i] === ',' && !quoted) { commas++; }
+			}
+			
+			const activeParameter = commas;
+			const signatureHelp = new vscode.SignatureHelp();
+			
+			const firstArgMatch = argsString.match(/^\s*"([^"]+)"/);
+			let syscallName = null;
+			if (firstArgMatch) {
+				syscallName = firstArgMatch[1];
+			}
+
+			if (syscallName) {
+				const sysInfo = syscalls.find((s: any) => s.name === syscallName);
+				if (sysInfo) {
+					const params = [];
+					params.push(new vscode.ParameterInformation('fun_code: str', `System Call: ${sysInfo.name}`));
+					if (sysInfo.arg1) { params.push(new vscode.ParameterInformation('arg1', sysInfo.arg1)); }
+					if (sysInfo.arg2) { params.push(new vscode.ParameterInformation('arg2', sysInfo.arg2)); }
+					if (sysInfo.arg3) { params.push(new vscode.ParameterInformation('arg3', sysInfo.arg3)); }
+					
+					const sigParamsStr = params.map((p: any) => p.label).join(', ');
+					const signature = new vscode.SignatureInformation(`exposcall(${sigParamsStr})`, `Signature for ${sysInfo.name}`);
+					signature.parameters = params;
+					
+					signatureHelp.signatures = [signature];
+					signatureHelp.activeSignature = 0;
+					signatureHelp.activeParameter = activeParameter;
+					return signatureHelp;
+				}
+			}
+			
+			// Fallback signature
+			const fallbackSig = new vscode.SignatureInformation('exposcall(fun_code, arg1, arg2, arg3)', 'Executes a system call');
+			fallbackSig.parameters = [
+				new vscode.ParameterInformation('fun_code', 'The system call name (e.g., "Write")'),
+				new vscode.ParameterInformation('arg1', 'First argument'),
+				new vscode.ParameterInformation('arg2', 'Second argument'),
+				new vscode.ParameterInformation('arg3', 'Third argument')
+			];
+			signatureHelp.signatures = [fallbackSig];
+			signatureHelp.activeSignature = 0;
+			signatureHelp.activeParameter = activeParameter;
+			
+			return signatureHelp;
+		}
+	}, '(', ',');
+
+	context.subscriptions.push(disposable, completionProvider, exposcallCompletionProvider, signatureHelpProvider);
 }
 
 // This method is called when your extension is deactivated
