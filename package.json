@@ -1,6 +1,7 @@
 {
   "name": "expl-highlight",
   "displayName": "Expl-Highlight",
+  "publisher": "AjayAB",
   "icon": "image/icon.png",
   "description": "A simple code highlighter for Expl language",
   "version": "1.0.0",

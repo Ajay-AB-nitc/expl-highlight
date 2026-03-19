@@ -15,7 +15,14 @@ A simple VS Code extension for providing syntax highlighting and code snippets f
 
 ## Installation
 
-### Option 1: Install from VSIX (Recommended)
+### Option 1: Install from VS Code Marketplace
+
+1. **Search**: Open VS Code and go to the **Extensions** view (`Ctrl+Shift+X`).
+2. **Install**:
+   - Search for "Expl-Highlight".
+   - Click the **Install** button.
+
+### Option 2: Install from VSIX
 
 1. **Download**: Obtain the latest `.vsix` file from the **Releases** section of the repository.
 2. **Install**:
@@ -31,7 +38,7 @@ A simple VS Code extension for providing syntax highlighting and code snippets f
        code --install-extension path/to/expl-highlight-x.x.x.vsix
        ```
 
-### Option 2: From Source
+### Option 3: From Source
 
 If you prefer to build from source or make modifications:
 
