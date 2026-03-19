@@ -9,6 +9,9 @@ A simple VS Code extension for providing syntax highlighting and code snippets f
   - **Blocks**: `if-then-endif`, `while-do-endwhile`, `decl-enddecl`, and `type-endtype`.
   - **Main Function**: Quick generator for the `int main()` skeleton.
   - **Built-in Functions**: Autocomplete for `read()`, `write()`, `initialize()`, `alloc()`, and `free()` (including automatic semicolon and bracket handling).
+- **ExpOS System Calls (`exposcall`)**: 
+  - **Smart Autocomplete**: Instantly suggests valid ExpOS system call names (e.g., `"Read"`, `"Write"`, `"Create"`) based on `syscalls.json`.
+  - **Dynamic Signature Help**: Automatically displays the expected argument descriptions for the specific system call you are currently typing.
 
 > [!NOTE]
 > This extension is primarily a **highlighter and snippet provider**. It does **not** include Language Server Protocol (LSP) features such as "Go to Definition", "Find References", or type checking.
