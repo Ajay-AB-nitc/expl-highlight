@@ -205,13 +205,13 @@ export function activate(context: vscode.ExtensionContext) {
 				const sysInfo = syscalls.find((s: any) => s.name === syscallName);
 				if (sysInfo) {
 					const params = [];
-					params.push(new vscode.ParameterInformation('fun_code: str', `System Call: ${sysInfo.name}`));
-					if (sysInfo.arg1) { params.push(new vscode.ParameterInformation('arg1', sysInfo.arg1)); }
-					if (sysInfo.arg2) { params.push(new vscode.ParameterInformation('arg2', sysInfo.arg2)); }
-					if (sysInfo.arg3) { params.push(new vscode.ParameterInformation('arg3', sysInfo.arg3)); }
+					params.push(new vscode.ParameterInformation(`"${sysInfo.name}"`, `System Call: ${sysInfo.name}`));
+					if (sysInfo.arg1) { params.push(new vscode.ParameterInformation(sysInfo.arg1)); }
+					if (sysInfo.arg2) { params.push(new vscode.ParameterInformation(sysInfo.arg2)); }
+					if (sysInfo.arg3) { params.push(new vscode.ParameterInformation(sysInfo.arg3)); }
 					
 					const sigParamsStr = params.map((p: any) => p.label).join(', ');
-					const signature = new vscode.SignatureInformation(`exposcall(${sigParamsStr})`, `Signature for ${sysInfo.name}`);
+					const signature = new vscode.SignatureInformation(`exposcall(${sigParamsStr})`, `System Call parameters for ${sysInfo.name}`);
 					signature.parameters = params;
 					
 					signatureHelp.signatures = [signature];
